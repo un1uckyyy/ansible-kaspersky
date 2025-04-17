@@ -1,7 +1,6 @@
-- name: Установить Docker (если не установлен)
-  apt:
-    name: docker.io
-    state: present
+- name: Установить Docker
+  include_role:
+    name: geerlingguy.docker
   when: deploy_mode == "docker"
 
 - name: Открыть порт {{ microservice_expose_port }} в firewall

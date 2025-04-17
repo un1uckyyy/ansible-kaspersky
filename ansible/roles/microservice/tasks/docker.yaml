@@ -1,7 +1,23 @@
+- name: Создать директорию
+  file:
+    path: "{{ docker_compose_path }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
 - name: Копировать compose.yaml
-  copy:
+  template:
     src: "{{ playbook_dir }}/roles/microservice/templates/compose.yaml.j2"
-    dest: /opt/microservice/compose.yaml
+    dest: "{{ docker_compose_path }}/compose.yaml"
+
+- name: Копировать образ в формате .tar
+  copy:
+    src: "{{ playbook_dir }}/../build/microservice.tar"
+    dest: "/tmp/{{ microservice_name }}.tar"
+
+- name: Загрузить образ из .tar файла
+  command: "docker load -i /tmp/{{ microservice_name }}.tar"
 
 - name: Запуск docker compose
   shell: docker compose up -d

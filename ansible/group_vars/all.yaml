@@ -1,0 +1,5 @@
+deploy_mode: "systemd"  # или "docker"
+microservice_name: "microservice"
+binary_path: "/usr/local/bin/microservice"
+docker_compose_path: "/srv/microservice"
+microservice_expose_port: 8080

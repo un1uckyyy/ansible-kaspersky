@@ -1,0 +1,13 @@
+- name: Установить Docker (если не установлен)
+  apt:
+    name: docker.io
+    state: present
+  when: deploy_mode == "docker"
+
+- name: Открыть порт {{ microservice_expose_port }} в firewall
+  ansible.posix.firewalld:
+    port: "{{ microservice_expose_port }}/tcp"
+    zone: public
+    permanent: true
+    state: enabled
+    immediate: true

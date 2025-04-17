@@ -1,0 +1,7 @@
+- name: Развёртывание как systemd
+  include_tasks: systemd.yaml
+  when: deploy_mode == "systemd"
+
+- name: Развёртывание как Docker
+  include_tasks: docker.yaml
+  when: deploy_mode == "docker"

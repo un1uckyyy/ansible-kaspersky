@@ -1,0 +1,7 @@
+services:
+  app:
+    container_name: {{ microservice_name }}
+    image: "microservice:latest"
+    restart: on-failure
+    ports:
+      - "{{ microservice_expose_port }}:8080"

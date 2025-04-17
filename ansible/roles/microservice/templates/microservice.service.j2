@@ -1,0 +1,12 @@
+[Unit]
+Description={{ microservice_name }}
+After=network.target
+Wants=network-online.target
+
+[Service]
+ExecStart={{ binary_path }}
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target

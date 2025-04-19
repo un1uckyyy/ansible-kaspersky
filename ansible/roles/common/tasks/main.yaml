@@ -3,10 +3,25 @@
     name: geerlingguy.docker
   when: deploy_mode == "docker"
 
-- name: Открыть порт {{ microservice_expose_port }} в firewall
-  ansible.posix.firewalld:
-    port: "{{ microservice_expose_port }}/tcp"
-    zone: public
-    permanent: true
-    state: enabled
-    immediate: true
+- name: Настроить firewalld
+  block:
+    - name: Установить зависимости для firewalld
+      ansible.builtin.dnf:
+        name:
+          - firewalld
+          - python3-firewall
+        state: present
+
+    - name: Убедиться, что firewalld запущен
+      ansible.builtin.service:
+        name: firewalld
+        state: started
+        enabled: true
+
+    - name: Открыть порт {{ microservice_expose_port }} в firewall
+      ansible.posix.firewalld:
+        port: "{{ microservice_expose_port }}/tcp"
+        zone: public
+        permanent: true
+        state: enabled
+        immediate: true

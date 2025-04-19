@@ -48,3 +48,32 @@ make image
 ansible-playbook -i ansible/inventory.ini ansible/playbook.yaml \
   --extra-vars "deploy_mode=docker" --ask-become-pass
 ```
+
+# Terraform
+
+установим Terraform используя <a href="https://developer.hashicorp.com/terraform/install?ref=roksblog.de#linux">apt</a>
+
+затем установим libvirt <a href="https://github.com/dmacvicar/terraform-provider-libvirt">provider</a>
+
+скачаем образ AlmaLinux 9
+
+```shell
+wget https://repo.almalinux.org/almalinux/9/cloud/x86_64/images/AlmaLinux-9-GenericCloud-9.5-20241120.x86_64.qcow2
+mv AlmaLinux-9-GenericCloud-9.5-20241120.x86_64.qcow2 ./terraform/alma
+```
+
+```shell
+terraform init
+terraform validate
+terraform apply
+```
+
+убедимся, что ВМ запустилась и получила IP-адрес
+
+```shell
+virsh list --all
+virsh net-dhcp-leases alma_network
+```
+
+далее указываем ip и username (alma) в ansible inventory.ini
+become pass - "alma" (можно задать в terraform/cloud_init.cfg)
